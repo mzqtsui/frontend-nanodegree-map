@@ -30,7 +30,6 @@ gulp.task('scripts', function() {
 
 gulp.task('styles', function() {
     return gulp.src(paths.styles)
-        .pipe(cleancss())
         .pipe(sass())
         .pipe(gulp.dest('dist/css'));
 });

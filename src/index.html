@@ -4,16 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Climbing Gym Map</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
     <main>
         <header></header>
         <nav class="navbar">
-            <input type="text" id="searchInput">
-            <ul id="locationList">
-                <li></li>
-            </ul>
+            <div class="search">
+                <form class="search-form" onsubmit="event.preventDefault()">
+                    <input type="text" id="search-input">
+                    <button class="search-btn"><i class="material-icons">search</i></button>
+                    <button class="close-btn"><i class="material-icons">close</i></button>
+                </form>
+
+                <ul class="search-list">
+                    <li class="search-item">Climbing Gym</li>
+                    <li class="search-item">Climbing Gym</li>
+                    <li class="search-item">Climbing Gym</li>
+                    <li class="search-item">Climbing Gym</li>
+                    <li class="search-item">Climbing Gym</li>
+                    <li class="search-item">Climbing Gym</li>
+                    <li class="search-item">Climbing Gym</li>
+                </ul>
+            </div>
         </nav>
         <article id="map"></article>
         <footer></footer>
