@@ -23,6 +23,9 @@ var paths = {
 
 gulp.task('scripts', function() {
     return gulp.src(paths.scripts)
+        .pipe(babel({
+            presets: ['es2015']
+        }))
         .pipe(uglify())
         .pipe(rename('app.min.js'))
         .pipe(gulp.dest('dist/js/'));

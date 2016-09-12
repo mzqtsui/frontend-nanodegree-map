@@ -18,14 +18,8 @@
                     <button class="close-btn"><i class="material-icons">close</i></button>
                 </form>
 
-                <ul class="search-list">
-                    <li class="search-item">Climbing Gym</li>
-                    <li class="search-item">Climbing Gym</li>
-                    <li class="search-item">Climbing Gym</li>
-                    <li class="search-item">Climbing Gym</li>
-                    <li class="search-item">Climbing Gym</li>
-                    <li class="search-item">Climbing Gym</li>
-                    <li class="search-item">Climbing Gym</li>
+                <ul class="search-list" data-bind="foreach: gymList">
+                    <li class="search-item" data-bind="text: generalInfo.name">Climbing Gym</li>
                 </ul>
             </div>
         </nav>
