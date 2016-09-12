@@ -1,4 +1,4 @@
-((function () {
+(function () {
     "use strict";
 
     class Gym {
@@ -11,6 +11,7 @@
 
     var ViewModel = function (dataList) {
         var self = this;
+        this.currentLocation = ko.observable(null);
         this.query = ko.observable("");
         this.gymList = ko.observableArray(dataList);
 
@@ -24,6 +25,31 @@
                 });
             }
         });
+
+        this.submitForm = function () {
+            self.selectFirstLocation();
+        };
+
+        this.selectLocation = function () {
+            self.currentLocation(this);
+            self.query(this.generalInfo.name);
+        };
+
+        this.selectFirstLocation = function () {
+            if(self.filterLocations().length > 0 && self.query().length > 0) {
+                self.currentLocation(self.filterLocations()[0]);
+                self.query(self.currentLocation().generalInfo.name);
+                console.log("select");
+            }
+            //TODO show error not found
+
+
+        };
+
+        this.clearSearch = function () {
+            self.currentLocation(null);
+            self.query("");
+        };
     };
 
     //TODO: Google Maps API
@@ -85,4 +111,4 @@
 
     //TODO: Uber API
 
-})());
+})();
