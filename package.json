@@ -1,0 +1,35 @@
+{
+  "name": "frontend-nanodegree-map",
+  "version": "1.0.0",
+  "description": "frontend-nanodegree-map",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "critical": "^0.8.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^2.0.12",
+    "gulp-concat": "^2.6.0",
+    "gulp-minify": "^0.0.14",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-rename": "^1.2.2",
+    "gulp-responsive": "^2.5.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-webserver": "^0.9.1"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mzqtsui/frontend-nanodegree-map.git"
+  },
+  "author": "Matthew Tsui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mzqtsui/frontend-nanodegree-map/issues"
+  },
+  "homepage": "https://github.com/mzqtsui/frontend-nanodegree-map#readme",
+  "private": true
+}
