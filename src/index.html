@@ -13,12 +13,11 @@
         <nav class="navbar">
             <div class="search">
                 <form class="search-form" onsubmit="event.preventDefault()">
-                    <input type="text" id="search-input">
+                    <input type="text" id="search-input" data-bind="value: query, valueUpdate: 'afterkeydown'" autocomplete="off">
                     <button class="search-btn"><i class="material-icons">search</i></button>
                     <button class="close-btn"><i class="material-icons">close</i></button>
                 </form>
-
-                <ul class="search-list" data-bind="foreach: gymList">
+                <ul class="search-list" data-bind="foreach: filterLocations()">
                     <li class="search-item" data-bind="text: generalInfo.name">Climbing Gym</li>
                 </ul>
             </div>

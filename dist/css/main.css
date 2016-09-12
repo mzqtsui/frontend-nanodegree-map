@@ -64,3 +64,14 @@ main {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4); }
+
+.search-item,
+.close-btn {
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */ }

@@ -3,6 +3,13 @@ body {
     font-family: Helvetica, Arial, sans-serif;
 }
 
+@mixin no-select() {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
+}
+
 main {
     height: 100vh;
     width: 100vw;
@@ -77,4 +84,9 @@ main {
     background: rgba(0,0,0,0.1);
     border-radius: 50%;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.search-item,
+.close-btn {
+    @include no-select();
 }
