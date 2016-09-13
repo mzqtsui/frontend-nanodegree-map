@@ -6,6 +6,7 @@
     <title>Climbing Gym Map</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/mobile.css" media="(max-width: 460px)">
 </head>
 <body>
     <main>
@@ -13,8 +14,7 @@
         <nav class="navbar">
             <div class="search">
                 <form class="search-form" data-bind="submit: submitForm">
-                    <input type="text" id="search-input" data-bind="value: query, valueUpdate: 'afterkeydown'" autocomplete="off">
-                    <input type="submit" class="search-btn material-icons" value="search">
+                    <input type="text" id="search-input" data-bind="value: query, valueUpdate: 'afterkeydown'" autocomplete="off" placeholder="Search...">
                     <input type="reset" class="close-btn material-icons" data-bind="click: clearSearch()" value="close">
                 </form>
                 <ul class="search-list" data-bind="foreach: filterLocations()">
@@ -26,6 +26,17 @@
         <footer></footer>
     </main>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js" integrity="sha256-ly8TiTtwVsBWdjekTqTJlLGz3Rsg4YXr80eK6QhtdMs=" crossorigin="anonymous"></script>
+    <!-- <script>
+        function initMap() {
+            // Create a map object and specify the DOM element for display.
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 37.6419628, lng: -122.5127333},
+                scrollwheel: false,
+                zoom: 10
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP-CUa9ZmcC4gUEC3idcvHBaUE3dKODBY&callback=initMap" async defer></script> -->
     <script src="js/app.min.js"></script>
 </body>
 </html>
