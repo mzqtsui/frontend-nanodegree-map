@@ -338,30 +338,40 @@ var planetGraniteData = {
 class Gym {
     constructor (gi, marker) {
         var self = this;
-        this.uberInfo = {};
+        this.uberEstimate = null;
         this.generalInfo = gi;
         this.marker = marker;
         this.details = null;
         this.content = "";
+        this.uberContent = "";
 
         this.marker.addListener("click", function() {
+            if(!self.uberEstimate) {
+                self.uberContent += "<div class='uber-info no-data'><img src='img/uber_rides_api_icon.svg'>";
+                self.uberContent += "<div class='uber-estimate'></div></div>";
+                getUberInfo(self.generalInfo.position).done(function() {
+                    //console.log(response);
+                    self.uberEstimate = $(".uber-estimate").html();
+
+
+                });
+            }else {
+                self.uberContent = "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'>" +
+                                    "<div class='uber-estimate'>" + self.uberEstimate + "</div></div>";
+            }
             if(!self.details) {
                 places.getDetails({"placeId": self.generalInfo.placeId}, function(place, status) {
                     if(status == google.maps.places.PlacesServiceStatus.OK) {
                         self.details = place;
-                        console.log(place);
                         self.content += "<h3>" + self.generalInfo.name + "</h3>";
-
                         self.content += "<div>Rating: " + self.details.rating + "</div>";
-
                         self.content += "<a href='" + self.details.website + "' target='blank'>Website</a>";
-
-                        infowindow.setContent(self.content);
+                        infowindow.setContent(self.content + self.uberContent);
                         infowindow.open(map, marker);
                     }
                 });
             }else{
-                infowindow.setContent(self.content);
+                infowindow.setContent(self.content  + self.uberContent);
                 infowindow.open(map, marker);
             }
         });
@@ -425,11 +435,39 @@ var ViewModel = function(dataList) {
     };
 };
 
-//TODO: Google Maps API
+// Get user location data
+var userPosition = {lat: "", lng: ""};
 
+navigator.geolocation.watchPosition(function(position) {
 
-//TODO: Uber API
+    // Update latitude and longitude
+    userPosition.lat = position.coords.latitude;
+    userPosition.lng = position.coords.longitude;
+});
 
+// Uber
+function getUberInfo(endPosition) {
+    return $.ajax({
+        url: "https://api.uber.com/v1/estimates/price",
+        method: "GET",
+        data: {
+            "server_token": "5GZQyy22lia0d4g1CqXr8OWLqhDE3M6MguQ14KQw",
+            "start_latitude": userPosition.lat,
+            "start_longitude": userPosition.lng,
+            "end_latitude": endPosition.lat,
+            "end_longitude": endPosition.lng
+        },
+        success: function(result) {
+            $(".uber-estimate").html(result.prices[0].estimate);
+            $(".uber-info").removeClass("no-data");
+        },
+        error: function(result) {
+            console.log(result);
+        }
+    });
+}
+
+// Google Maps
 var markers = [];
 
 function initMap() {
@@ -482,7 +520,8 @@ function initMap() {
             position: locations[i].position,
             map: map,
             name: locations[i].name,
-            id: locations[i].placeId
+            id: locations[i].placeId,
+            animation: google.maps.Animation.DROP
         });
         markers.push(marker);
         bounds.extend(marker.position);
@@ -527,3 +566,4 @@ function geocodePlaceId(geocoder, map, infowindow) {
 }
 
 
+//5GZQyy22lia0d4g1CqXr8OWLqhDE3M6MguQ14KQw

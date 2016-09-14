@@ -92,3 +92,14 @@ main {
 .close-btn {
     @include no-select();
 }
+
+.uber-info {
+
+    img {
+        width: 36px;
+    }
+
+    &.no-data {
+        display: none;
+    }
+}

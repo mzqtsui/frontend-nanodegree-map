@@ -77,3 +77,9 @@ main {
   /* IE 10+ */
   user-select: none;
   /* Likely future */ }
+
+.uber-info img {
+  width: 36px; }
+
+.uber-info.no-data {
+  display: none; }
