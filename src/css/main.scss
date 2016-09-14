@@ -20,6 +20,7 @@ main {
     z-index: 1;
     height: 100vh;
     width: 360px;
+    pointer-events: none;
 }
 
 .search {
@@ -27,6 +28,7 @@ main {
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0,0,0,0.2);
     background: white;
+    pointer-events: auto;
 }
 
 
