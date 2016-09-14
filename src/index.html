@@ -14,11 +14,11 @@
         <nav class="navbar">
             <div class="search">
                 <form class="search-form" data-bind="submit: submitForm">
-                    <input type="text" id="search-input" data-bind="value: query, valueUpdate: 'afterkeydown'" autocomplete="off" placeholder="Search...">
+                    <input type="text" id="search-input" data-bind="textInput: query, hasFocus: searchFocused" autocomplete="off" placeholder="Search...">
                     <input type="reset" class="close-btn material-icons" data-bind="click: clearSearch()" value="close">
                 </form>
                 <ul class="search-list" data-bind="foreach: filterLocations()">
-                    <li class="search-item" data-bind="text: generalInfo.name, click: $parent.selectLocation">Climbing Gym</li>
+                    <li class="search-item" data-bind="text: generalInfo.name, click: $parent.selectLocation, clickBubble: false">Climbing Gym</li>
                 </ul>
             </div>
         </nav>
@@ -26,17 +26,11 @@
         <footer></footer>
     </main>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js" integrity="sha256-ly8TiTtwVsBWdjekTqTJlLGz3Rsg4YXr80eK6QhtdMs=" crossorigin="anonymous"></script>
-    <!-- <script>
-        function initMap() {
-            // Create a map object and specify the DOM element for display.
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 37.6419628, lng: -122.5127333},
-                scrollwheel: false,
-                zoom: 10
-            });
-        }
+    <script>
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP-CUa9ZmcC4gUEC3idcvHBaUE3dKODBY&callback=initMap" async defer></script> -->
     <script src="js/app.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP-CUa9ZmcC4gUEC3idcvHBaUE3dKODBY&callback=initMap" async defer></script>
+
 </body>
 </html>
