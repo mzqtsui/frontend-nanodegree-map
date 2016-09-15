@@ -346,6 +346,17 @@ class Gym {
         this.uberContent = "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'><div class='uber-estimate'>Loading...</div></div>";
 
         this.marker.addListener("click", function() {
+            self.updateSelected();
+        });
+
+        this.updateSelected = function() {
+            // Animate marker
+            self.marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function(){
+                self.marker.setAnimation(null);
+            }, 750);
+
+            // Populate Uber Data
             if(!self.uberEstimate) {
                 getUberInfo(self.generalInfo.position).done(function() {
                     self.uberEstimate = $(".uber-estimate").html();
@@ -353,6 +364,8 @@ class Gym {
             }else {
                 self.uberContent = self.uberContent.replace("Loading...", self.uberEstimate);
             }
+
+            // Populate Google Maps Data and open infowindow
             if(!self.details) {
                 places.getDetails({"placeId": self.generalInfo.placeId}, function(place, status) {
                     if(status == google.maps.places.PlacesServiceStatus.OK) {
@@ -366,8 +379,9 @@ class Gym {
                 infowindow.setContent(self.content  + self.uberContent);
                 infowindow.open(map, marker);
             }
-        });
-        //TODO: add rates manually
+        };
+
+
 
     }
 }
@@ -375,17 +389,21 @@ class Gym {
 var ViewModel = function(dataList) {
     var self = this;
     this.searchFocused = ko.observable(false);
+    this.listVisible = ko.observable(true);
     this.currentLocation = ko.observable(null);
     this.query = ko.observable("");
     this.gymList = ko.observableArray(dataList);
+    this.buttonClass = ko.observable("close");
 
     // Show only the locations that contain the query
     this.filterLocations =  ko.computed(function () {
+        infowindow.close();
         var filter = self.query().toLowerCase();
         if (!filter) {
             self.gymList().forEach(function(item) {
                 item.marker.setVisible(true);
             });
+            self.listVisible(true);
             return self.gymList();
         } else {
             return ko.utils.arrayFilter(self.gymList(), function (item) {
@@ -402,18 +420,19 @@ var ViewModel = function(dataList) {
 
     this.listItemClicked = function() {
         self.selectLocation(this);
-        self.searchFocused(true);
+        //self.searchFocused(true);
     };
 
     this.selectLocation = function(loc) {
         self.currentLocation(loc);
         self.query(loc.generalInfo.name);
+        loc.updateSelected();
     };
 
     this.selectFirstLocation = function() {
         var filteredLocations = self.filterLocations();
         if(filteredLocations.length > 0 && self.query().length > 0) {
-            self.selectLocation(filteredLocations[0])
+            self.selectLocation(filteredLocations[0]);
         }
         //TODO show error not found
 
@@ -425,6 +444,21 @@ var ViewModel = function(dataList) {
         self.query("");
         self.searchFocused(true);
     };
+
+    this.checkListVisible = ko.computed(function() {
+        return self.searchFocused ? 'block' : 'none';
+    });
+
+    this.searchFocused.subscribe(function(val) {
+        if(!val) {
+            // Hacky solution to deal with knockout js binding hiding the ul before triggering its click event
+            //setTimeout(function() { self.listVisible(false); }, 100);
+            self.buttonClass("search");
+        }else {
+            self.listVisible(true);
+            self.buttonClass("close");
+        }
+    });
 };
 
 // Get user location data
@@ -441,7 +475,7 @@ navigator.geolocation.watchPosition(function(position) {
 function generateContent(details) {
     return  "<h3 class='iw-title'>" + details.name + "</h3>" +
             "<div class='iw-section'><i class='material-icons'>place</i><span class='iw-info'>" +
-                    details.formatted_address + "</span></div>" +
+                    formatAddress(details.formatted_address) + "</span></div>" +
             "<div class='iw-section'><i class='material-icons'>local_phone</i><span class='iw-info'>" +
                     details.formatted_phone_number + "</span></div>" +
             "<div class='iw-section'><i class='material-icons'>favorite</i><span class='iw-info'>" +
@@ -456,6 +490,11 @@ function formatUrl(url) {
     url = url.replace(/((https)|(http)):\/\//g, "");
     url = url.substr(0, url.indexOf("/"));
     return url;
+}
+
+// Format address for infowindow
+function formatAddress(addr) {
+    return addr.replace(",", "<br>");
 }
 
 // Uber
@@ -491,6 +530,13 @@ function initMap() {
 
     infowindow = new google.maps.InfoWindow;
     places = new google.maps.places.PlacesService(map);
+
+    //https://www.sitepoint.com/animated-google-map-markers-css-javascript/
+    var myoverlay = new google.maps.OverlayView();
+    myoverlay.draw = function () {
+        this.getPanes().markerLayer.id='markerLayer';
+    };
+    myoverlay.setMap(map);
 
     var locations = [
         {
@@ -564,7 +610,9 @@ function geocodePlaceId(geocoder, map, infowindow) {
         map.setCenter(results[0].geometry.location);
         var marker = new google.maps.Marker({
           map: map,
-          position: results[0].geometry.location
+          position: results[0].geometry.location,
+          optimized: false,
+          animation: google.maps.animation.BOUNCE
         });
         infowindow.setContent(results[0].formatted_address);
         infowindow.open(map, marker);

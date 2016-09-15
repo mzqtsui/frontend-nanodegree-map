@@ -35,10 +35,10 @@ main {
 
 .search-form {
   height: 46px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   display: flex; }
 
 .search-list {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
   list-style: none;
   padding: 0;
   margin: 0; }
@@ -111,3 +111,23 @@ main {
 
 .material-icons {
   opacity: 0.5; }
+
+#markerLayer img {
+  animation: bounce .5s infinite alternate;
+  -webkit-animation: bounce .5s infinite alternate;
+  transform-origin: center;
+  -webkit-transform-origin: center; }
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+    -webkit-transform: scale(1); }
+  20% {
+    transform: scaleX(0.9) scaleY(0.5);
+    -webkit-transform: scaleX(0.9) scaleY(0.5); }
+  40% {
+    transform: scaleY(1.2) scaleX(0.8);
+    -webkit-transform: scaleY(1.2) scaleX(0.8); }
+  100% {
+    transform: scale(1);
+    -webkit-transform: scale(1); } }

@@ -15,9 +15,9 @@
             <div class="search">
                 <form class="search-form" data-bind="submit: submitForm">
                     <input type="text" id="search-input" data-bind="textInput: query, hasFocus: searchFocused" autocomplete="off" placeholder="Search...">
-                    <input type="reset" class="close-btn material-icons" data-bind="click: clearSearch()" value="close">
+                    <input type="reset" class="close-btn material-icons" data-bind="click: clearSearch(), value: buttonClass" value="">
                 </form>
-                <ul class="search-list" data-bind="foreach: filterLocations()">
+                <ul class="search-list" data-bind="foreach: filterLocations(), style: { display: checkListVisible() }">
                     <li class="search-item" data-bind="text: generalInfo.name, click: $parent.listItemClicked, clickBubble: false">Climbing Gym</li>
                 </ul>
             </div>
