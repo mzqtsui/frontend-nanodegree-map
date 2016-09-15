@@ -343,29 +343,21 @@ class Gym {
         this.marker = marker;
         this.details = null;
         this.content = "";
-        this.uberContent = "";
+        this.uberContent = "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'><div class='uber-estimate'>Loading...</div></div>";
 
         this.marker.addListener("click", function() {
             if(!self.uberEstimate) {
-                self.uberContent += "<div class='uber-info no-data'><img src='img/uber_rides_api_icon.svg'>";
-                self.uberContent += "<div class='uber-estimate'></div></div>";
                 getUberInfo(self.generalInfo.position).done(function() {
-                    //console.log(response);
                     self.uberEstimate = $(".uber-estimate").html();
-
-
                 });
             }else {
-                self.uberContent = "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'>" +
-                                    "<div class='uber-estimate'>" + self.uberEstimate + "</div></div>";
+                self.uberContent = self.uberContent.replace("Loading...", self.uberEstimate);
             }
             if(!self.details) {
                 places.getDetails({"placeId": self.generalInfo.placeId}, function(place, status) {
                     if(status == google.maps.places.PlacesServiceStatus.OK) {
                         self.details = place;
-                        self.content += "<h3>" + self.generalInfo.name + "</h3>";
-                        self.content += "<div>Rating: " + self.details.rating + "</div>";
-                        self.content += "<a href='" + self.details.website + "' target='blank'>Website</a>";
+                        self.content = generateContent(self.details);
                         infowindow.setContent(self.content + self.uberContent);
                         infowindow.open(map, marker);
                     }
@@ -445,6 +437,27 @@ navigator.geolocation.watchPosition(function(position) {
     userPosition.lng = position.coords.longitude;
 });
 
+// Generate Google Maps markup for infowindow
+function generateContent(details) {
+    return  "<h3 class='iw-title'>" + details.name + "</h3>" +
+            "<div class='iw-section'><i class='material-icons'>place</i><span class='iw-info'>" +
+                    details.formatted_address + "</span></div>" +
+            "<div class='iw-section'><i class='material-icons'>local_phone</i><span class='iw-info'>" +
+                    details.formatted_phone_number + "</span></div>" +
+            "<div class='iw-section'><i class='material-icons'>favorite</i><span class='iw-info'>" +
+                    details.rating + "</span></div>" +
+            "<div class='iw-section'><i class='material-icons'>public</i><span class='iw-info'><a class='iw-link' href='" +
+                    details.website + "' target='blank'>" + formatUrl(details.website) + "</a></span></div>";
+}
+
+
+// Strips url to only domain
+function formatUrl(url) {
+    url = url.replace(/((https)|(http)):\/\//g, "");
+    url = url.substr(0, url.indexOf("/"));
+    return url;
+}
+
 // Uber
 function getUberInfo(endPosition) {
     return $.ajax({
@@ -459,10 +472,9 @@ function getUberInfo(endPosition) {
         },
         success: function(result) {
             $(".uber-estimate").html(result.prices[0].estimate);
-            $(".uber-info").removeClass("no-data");
         },
         error: function(result) {
-            console.log(result);
+            $(".uber-estimate").html("No data");
         }
     });
 }

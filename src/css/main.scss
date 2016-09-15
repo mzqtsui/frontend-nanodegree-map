@@ -94,12 +94,49 @@ main {
 }
 
 .uber-info {
+    margin-top: 10px;
+    padding: 4px;
+    width: 80px;
+    box-sizing: border-box;
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 2px;
+    text-align: center;
 
     img {
         width: 36px;
     }
+}
 
-    &.no-data {
-        display: none;
+.iw-title {
+    margin: 8px 0;
+}
+
+.iw-section {
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+}
+
+.iw-info {
+    margin-left: 6px;
+}
+
+.iw-link {
+    text-decoration: none;
+
+    color: #3498db;
+
+    &:visited {
+        color: #3498db;
     }
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+}
+
+.material-icons {
+    opacity: 0.5;
 }
