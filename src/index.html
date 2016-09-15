@@ -10,28 +10,25 @@
 </head>
 <body>
     <main>
-        <header></header>
         <nav class="navbar">
             <div class="search">
                 <form class="search-form" data-bind="submit: submitForm">
                     <input type="text" id="search-input" data-bind="textInput: query, hasFocus: searchFocused, click: inputClicked()" autocomplete="off" placeholder="Search...">
                     <input type="reset" class="close-btn material-icons" data-bind="click: clearSearch(), value: buttonClass" value="">
                 </form>
-                <ul class="search-list" data-bind="foreach: filterLocations(), visible: listVisible">
-                    <li class="search-item" data-bind="text: generalInfo.name, click: $parent.listItemClicked, clickBubble: false">Climbing Gym</li>
-                </ul>
+                <div data-bind="template: 'listTmpl'"></div>
+                <script id="listTmpl" type="text/html">
+                    <ul class="search-list" data-bind="foreach: filterLocations(), visible: listVisible">
+                        <li class="search-item" data-bind="text: generalInfo.name, click: $parent.listItemClicked, clickBubble: false">Map data could not be loaded</li>
+                    </ul>
+                </script>
             </div>
         </nav>
         <article id="map" data-bind="click: mapClicked()"></article>
-        <footer></footer>
     </main>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js" integrity="sha256-ly8TiTtwVsBWdjekTqTJlLGz3Rsg4YXr80eK6QhtdMs=" crossorigin="anonymous"></script>
-    <script>
-
-    </script>
     <script src="js/app.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP-CUa9ZmcC4gUEC3idcvHBaUE3dKODBY&callback=initMap&libraries=places" async defer></script>
-
 </body>
 </html>

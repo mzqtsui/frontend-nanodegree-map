@@ -55,7 +55,7 @@ class Gym {
 // Knockout ViewModel
 var ViewModel = function(dataList) {
     var self = this;
-    this.searchFocused = ko.observable(false);
+    this.searchFocused = ko.observable(true);
     this.listVisible = ko.observable(true);
     this.currentLocation = ko.observable(null);
     this.query = ko.observable("");
@@ -103,7 +103,6 @@ var ViewModel = function(dataList) {
         loc.updateSelected();
     };
 
-    // Choose first search result
     this.selectFirstLocation = function() {
         var filteredLocations = self.filterLocations();
         if(filteredLocations.length > 0 && self.query().length > 0) {
