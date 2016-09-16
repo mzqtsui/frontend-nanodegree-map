@@ -237,6 +237,8 @@ function getUberInfo(endPosition, callbacks) {
 
 // Google Maps
 function initMap() {
+    if(!google)
+        alert("asdaosd");
     // Create a map object and specify the DOM element for display.
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 37.6419628, lng: -122.5127333},
@@ -276,4 +278,9 @@ function initMap() {
     }
     viewModel = new ViewModel(data);
     ko.applyBindings(viewModel);
+}
+
+function googleError() {
+
+    alert("Google Maps could not be loaded");
 }
