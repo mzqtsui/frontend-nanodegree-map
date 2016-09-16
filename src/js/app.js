@@ -56,46 +56,46 @@ class Gym {
         this.marker.addListener("click", function() {
             self.updateSelected();
         });
+    }
 
-        this.updateSelected = function() {
-            // Animate marker
-            self.marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function(){
-                self.marker.setAnimation(null);
-            }, 750);
+    updateSelected() {
+        var self = this;
+        // Animate marker
+        self.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){
+            self.marker.setAnimation(null);
+        }, 750);
 
-            if(!self.uberEstimate) {
-                viewModel.uberMsg("Loading...");
-                getUberInfo(self.generalInfo.position,
-                {
-                    onsuccess:  function(result) {
-                        self.uberEstimate = result.prices[0].estimate;
-                        viewModel.uberMsg(self.uberEstimate);
-                    },
-                    onerror: function(result) {
-                        viewModel.uberMsg("No data");
-                    }
-                });
-            }else {
-                viewModel.uberMsg(self.uberEstimate);
-            }
+        // Get Uber data and update infowindow
+        if(!self.uberEstimate) {
+            getUberInfo(self.generalInfo.position,
+            {
+                onsuccess:  function(result) {
+                    self.uberEstimate = result.prices[0].estimate;
+                    self.content = generateContent(self.details, self.uberEstimate);
+                    infowindow.setContent(self.content);
+                },
+                onerror: function(result) {
+                    self.content = generateContent(self.details, "No data");
+                    infowindow.setContent(self.content);
+                }
+            });
+        }
 
-            // Populate Google Maps Data and open infowindow if model data has not be retrieved yet
-            if(!self.details) {
-                places.getDetails({"placeId": self.generalInfo.placeId}, function(place, status) {
-                    if(status == google.maps.places.PlacesServiceStatus.OK) {
-                        self.details = place;
-                        self.content = generateContent(self.details);
-                        infowindow.setContent(self.content);
-                        infowindow.open(map, marker);
-                        ko.applyBindings(viewModel, self.content);
-                    }
-                });
-            }else{
-                infowindow.setContent(self.content);
-                infowindow.open(map, marker);
-            }
-        };
+        // Populate Google Maps Data and open infowindow if model data has not be retrieved yet
+        if(!self.details) {
+            places.getDetails({"placeId": self.generalInfo.placeId}, function(place, status) {
+                if(status == google.maps.places.PlacesServiceStatus.OK) {
+                    self.details = place;
+                    self.content = generateContent(self.details, (self.uberEstimate) ? self.uberEstimate: "Loading...");
+                    infowindow.setContent(self.content);
+                    infowindow.open(map, self.marker);
+                }
+            });
+        }else{
+            infowindow.setContent(self.content);
+            infowindow.open(map, self.marker);
+        }
     }
 }
 
@@ -108,8 +108,6 @@ var ViewModel = function(dataList) {
     this.query = ko.observable("");
     this.gymList = ko.observableArray(dataList);
     this.buttonClass = ko.observable("search");
-    this.uberMsg = ko.observable("Loading...");
-    //ko.applyBindings(this, infowindowTmpl);
 
     // Show only the locations that contain the query
     this.filterLocations =  ko.computed(function () {
@@ -150,22 +148,6 @@ var ViewModel = function(dataList) {
         self.currentLocation(loc);
         self.query(loc.generalInfo.name);
         loc.updateSelected();
-
-        // if(!loc.uberEstimate) {
-        //     self.uberMsg("Loading...");
-        //     getUberInfo(loc.generalInfo.position,
-        //     {
-        //         onsuccess:  function(result) {
-        //             loc.uberEstimate = result.prices[0].estimate;
-        //             self.uberMsg(loc.uberEstimate);
-        //         },
-        //         onerror: function(result) {
-        //             self.uberMsg("No data");
-        //         }
-        //     });
-        // }else {
-        //     self.uberMsg(loc.uberEstimate);
-        // }
     };
 
     this.selectFirstLocation = function() {
@@ -209,8 +191,8 @@ navigator.geolocation.watchPosition(function(position) {
     userPosition.lng = position.coords.longitude;
 });
 
-// Generate Google Maps markup for infowindow
-function generateContent(details) {
+// Generate Markup for infowindow
+function generateContent(details, uberMsg) {
     return  $.parseHTML("<div class='iw-container'><h3 class='iw-title'>" + details.name + "</h3>" +
             "<div class='iw-section'><i class='material-icons'>place</i><span class='iw-info'>" +
                     formatAddress(details.formatted_address) + "</span></div>" +
@@ -220,7 +202,7 @@ function generateContent(details) {
                     details.rating + "</span></div>" +
             "<div class='iw-section'><i class='material-icons'>public</i><span class='iw-info'><a class='iw-link' href='" +
                     details.website + "' target='blank'>" + formatUrl(details.website) + "</a></span></div>" +
-            "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'><div class='uber-estimate' data-bind='text: uberMsg'></div></div></div>")[0];
+            "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'><div class='uber-estimate'>" + uberMsg + "</div></div></div>")[0];
 }
 
 
