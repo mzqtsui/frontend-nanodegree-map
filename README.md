@@ -14,3 +14,6 @@ A map for finding climbing gyms in the SF Bay Area
 
 ##### Google Maps API
 - generate & populate map with markers
+
+### Demo
+[View Demo](https://mzqtsui.github.io/frontend-nanodegree-map/dist/)

@@ -20,12 +20,12 @@ main {
   background: white;
   pointer-events: auto; }
 
-#map {
+.map-canvas {
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.1); }
 
-#search-input {
+.search-input {
   font-size: 15px;
   padding: 14px 10px;
   box-sizing: border-box;
@@ -112,7 +112,7 @@ main {
 .material-icons {
   opacity: 0.5; }
 
-#markerLayer img {
+.markerLayer img {
   animation: bounce .5s infinite alternate;
   -webkit-animation: bounce .5s infinite alternate;
   transform-origin: center;

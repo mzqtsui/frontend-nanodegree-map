@@ -3,6 +3,35 @@ var map,
     places,
     markers = [];
 
+// Gym locations
+var locations = [
+    {
+        name: "Planet Granite San Francisco",
+        placeId: "ChIJYR3cR92GhYAReMwzpHwVcI8",
+        position: {lat: 37.8041267, lng: -122.4685219},
+    },
+    {
+        name: "Dogpatch Boulders",
+        placeId: "ChIJ2xYuRrp_j4ARU9Lx0LBnqrY",
+        position: {lat: 37.7566538, lng: -122.389994},
+    },
+    {
+        name: "Mission Cliffs",
+        placeId: "ChIJQ2qEqDB-j4ARfAbDE0-IWvo",
+        position: {lat: 37.7610241, lng: -122.4147971},
+    },
+    {
+        name: "Great Western Power Company",
+        placeId: "ChIJiZODxK2Aj4ARTMot5wllmGU",
+        position: {lat: 37.8255233, lng: -122.2887678},
+    },
+    {
+        name: "Berkeley Ironworks",
+        placeId: "ChIJzXxD1PV-hYAR4VEMx86aHVw",
+        position: {lat: 37.8508457, lng: -122.2947798},
+    }
+];
+
 // Gym class for each location to be displayed
 class Gym {
     constructor (gi, marker) {
@@ -205,37 +234,9 @@ function initMap() {
     //https://www.sitepoint.com/animated-google-map-markers-css-javascript/
     var myoverlay = new google.maps.OverlayView();
     myoverlay.draw = function () {
-        this.getPanes().markerLayer.id='markerLayer';
+        this.getPanes().markerLayer.className='markerLayer';
     };
     myoverlay.setMap(map);
-
-    var locations = [
-        {
-            name: "Planet Granite San Francisco",
-            placeId: "ChIJYR3cR92GhYAReMwzpHwVcI8",
-            position: {lat: 37.8041267, lng: -122.4685219},
-        },
-        {
-            name: "Dogpatch Boulders",
-            placeId: "ChIJ2xYuRrp_j4ARU9Lx0LBnqrY",
-            position: {lat: 37.7566538, lng: -122.389994},
-        },
-        {
-            name: "Mission Cliffs",
-            placeId: "ChIJQ2qEqDB-j4ARfAbDE0-IWvo",
-            position: {lat: 37.7610241, lng: -122.4147971},
-        },
-        {
-            name: "Great Western Power Company",
-            placeId: "ChIJiZODxK2Aj4ARTMot5wllmGU",
-            position: {lat: 37.8255233, lng: -122.2887678},
-        },
-        {
-            name: "Berkeley Ironworks",
-            placeId: "ChIJzXxD1PV-hYAR4VEMx86aHVw",
-            position: {lat: 37.8508457, lng: -122.2947798},
-        }
-    ];
 
     var bounds = new google.maps.LatLngBounds();
 
