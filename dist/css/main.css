@@ -90,6 +90,9 @@ main {
   .uber-info img {
     width: 36px; }
 
+.uber-attr {
+  width: 80px; }
+
 .iw-title {
   margin: 8px 0; }
 
@@ -131,3 +134,17 @@ main {
   100% {
     transform: scale(1);
     -webkit-transform: scale(1); } }
+
+footer {
+  position: fixed;
+  bottom: -5px;
+  left: 80px;
+  height: 35px;
+  display: flex;
+  align-items: center; }
+
+.plus {
+  font-size: 20px;
+  font-weight: bold;
+  display: inline;
+  opacity: 0.5; }
