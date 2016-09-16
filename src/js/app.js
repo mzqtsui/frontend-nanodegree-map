@@ -4,42 +4,32 @@ var map,
     markers = [],
     viewModel;
 
-
-var infowindowTmpl = $.parseHTML(
-    "<div class='iw-container'><h3 class='iw-title' data-bind='text: iwName'></h3>" +
-    "<div class='iw-section'><i class='material-icons'>place</i><span class='iw-info' data-bind='text: iwAddress'></span></div>" +
-    "<div class='iw-section'><i class='material-icons'>local_phone</i><span class='iw-info' data-bind='text: iwPhone'></span></div>" +
-    "<div class='iw-section'><i class='material-icons'>favorite</i><span class='iw-info' data-bind='text: iwRating'></span></div>" +
-    "<div class='iw-section'><i class='material-icons'>public</i><span class='iw-info'><a class='iw-link'" +
-                "target='blank' data-bind='text: iwWebsite, attr { href: iwUrl }'></a></span></div>" +
-    "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'><div class='uber-estimate' data-bind='text: uberMsg'></div></div></div>")[0];
-
 // Gym locations
 var locations = [
     {
         name: "Planet Granite San Francisco",
         placeId: "ChIJYR3cR92GhYAReMwzpHwVcI8",
-        position: {lat: 37.8041267, lng: -122.4685219},
+        position: {lat: 37.8041267, lng: -122.4685219}
     },
     {
         name: "Dogpatch Boulders",
         placeId: "ChIJ2xYuRrp_j4ARU9Lx0LBnqrY",
-        position: {lat: 37.7566538, lng: -122.389994},
+        position: {lat: 37.7566538, lng: -122.389994}
     },
     {
         name: "Mission Cliffs",
         placeId: "ChIJQ2qEqDB-j4ARfAbDE0-IWvo",
-        position: {lat: 37.7610241, lng: -122.4147971},
+        position: {lat: 37.7610241, lng: -122.4147971}
     },
     {
         name: "Great Western Power Company",
         placeId: "ChIJiZODxK2Aj4ARTMot5wllmGU",
-        position: {lat: 37.8255233, lng: -122.2887678},
+        position: {lat: 37.8255233, lng: -122.2887678}
     },
     {
         name: "Berkeley Ironworks",
         placeId: "ChIJzXxD1PV-hYAR4VEMx86aHVw",
-        position: {lat: 37.8508457, lng: -122.2947798},
+        position: {lat: 37.8508457, lng: -122.2947798}
     }
 ];
 
@@ -111,7 +101,6 @@ var ViewModel = function(dataList) {
 
     // Show only the locations that contain the query
     this.filterLocations =  ko.computed(function () {
-        infowindow.close();
         var filter = self.query().toLowerCase();
         if (!filter) {
             self.gymList().forEach(function(item) {
@@ -120,6 +109,7 @@ var ViewModel = function(dataList) {
             self.listVisible(true);
             return self.gymList();
         } else {
+            infowindow.close();
             return ko.utils.arrayFilter(self.gymList(), function (item) {
                 var shown = item.generalInfo.name.toLowerCase().indexOf(filter) !== -1;
                 item.marker.setVisible(shown);
@@ -185,7 +175,6 @@ var ViewModel = function(dataList) {
 var userPosition = {lat: "", lng: ""};
 
 navigator.geolocation.watchPosition(function(position) {
-
     // Update latitude and longitude
     userPosition.lat = position.coords.latitude;
     userPosition.lng = position.coords.longitude;
@@ -281,6 +270,5 @@ function initMap() {
 }
 
 function googleError() {
-
     alert("Google Maps could not be loaded");
 }
