@@ -2,6 +2,7 @@ var map,
     infowindow,
     places,
     markers = [],
+    infowindows = [],
     viewModel;
 
 // Gym locations
@@ -35,15 +36,20 @@ var locations = [
 
 // Gym class for each location to be displayed
 class Gym {
-    constructor (gi, marker) {
+    constructor (gi, marker, infowindow) {
         var self = this;
         this.uberEstimate = null;
         this.generalInfo = gi;
         this.marker = marker;
         this.details = null;
         this.content = "";
+        this.infowindow = infowindow;
 
         this.marker.addListener("click", function() {
+            infowindows.forEach(function(item){
+                item.close();
+            });
+
             self.updateSelected();
         });
     }
@@ -63,11 +69,11 @@ class Gym {
                 onsuccess:  function(result) {
                     self.uberEstimate = result.prices[0].estimate;
                     self.content = generateContent(self.details, self.uberEstimate);
-                    infowindow.setContent(self.content);
+                    self.infowindow.setContent(self.content);
                 },
                 onerror: function(result) {
                     self.content = generateContent(self.details, "No data");
-                    infowindow.setContent(self.content);
+                    self.infowindow.setContent(self.content);
                 }
             });
         }
@@ -78,13 +84,13 @@ class Gym {
                 if(status == google.maps.places.PlacesServiceStatus.OK) {
                     self.details = place;
                     self.content = generateContent(self.details, (self.uberEstimate) ? self.uberEstimate: "Loading...");
-                    infowindow.setContent(self.content);
-                    infowindow.open(map, self.marker);
+                    self.infowindow.setContent(self.content);
+                    self.infowindow.open(map, self.marker);
                 }
             });
         }else{
-            infowindow.setContent(self.content);
-            infowindow.open(map, self.marker);
+            self.infowindow.setContent(self.content);
+            self.infowindow.open(map, self.marker);
         }
     }
 }
@@ -109,7 +115,7 @@ var ViewModel = function(dataList) {
             self.listVisible(true);
             return self.gymList();
         } else {
-            infowindow.close();
+            self.currentLocation().infowindow.close();
             return ko.utils.arrayFilter(self.gymList(), function (item) {
                 var shown = item.generalInfo.name.toLowerCase().indexOf(filter) !== -1;
                 item.marker.setVisible(shown);
@@ -135,6 +141,9 @@ var ViewModel = function(dataList) {
     };
 
     this.selectLocation = function(loc) {
+        infowindows.forEach(function(item){
+            item.close();
+        });
         self.currentLocation(loc);
         self.query(loc.generalInfo.name);
         loc.updateSelected();
@@ -182,7 +191,7 @@ navigator.geolocation.watchPosition(function(position) {
 
 // Generate Markup for infowindow
 function generateContent(details, uberMsg) {
-    return  $.parseHTML("<div class='iw-container'><h3 class='iw-title'>" + details.name + "</h3>" +
+    return  "<div class='iw-container'><h3 class='iw-title'>" + details.name + "</h3>" +
             "<div class='iw-section'><i class='material-icons'>place</i><span class='iw-info'>" +
                     formatAddress(details.formatted_address) + "</span></div>" +
             "<div class='iw-section'><i class='material-icons'>local_phone</i><span class='iw-info'>" +
@@ -191,7 +200,7 @@ function generateContent(details, uberMsg) {
                     details.rating + "</span></div>" +
             "<div class='iw-section'><i class='material-icons'>public</i><span class='iw-info'><a class='iw-link' href='" +
                     details.website + "' target='blank'>" + formatUrl(details.website) + "</a></span></div>" +
-            "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'><div class='uber-estimate'>" + uberMsg + "</div></div></div>")[0];
+            "<div class='uber-info'><img src='img/uber_rides_api_icon.svg'><div class='uber-estimate'>" + uberMsg + "</div></div></div>";
 }
 
 
@@ -256,6 +265,7 @@ function initMap() {
             animation: google.maps.Animation.DROP
         });
         markers.push(marker);
+        infowindows.push(new google.maps.InfoWindow);
         bounds.extend(marker.position);
     }
 
@@ -263,7 +273,7 @@ function initMap() {
 
     var data = [];
     for(var i = 0, len = locations.length; i < len; i++) {
-        data.push(new Gym(locations[i], markers[i]));
+        data.push(new Gym(locations[i], markers[i], infowindows[i]));
     }
     viewModel = new ViewModel(data);
     ko.applyBindings(viewModel);
